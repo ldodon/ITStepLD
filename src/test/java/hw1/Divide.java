@@ -1,4 +1,4 @@
-package HW1;
+package hw1;
 
 import com.itstep.DivideWithZeroException;
 import org.junit.Test;
