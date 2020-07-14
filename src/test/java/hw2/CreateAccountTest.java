@@ -4,7 +4,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,24 +23,22 @@ import java.time.format.DateTimeFormatter;
 public class CreateAccountTest {
 
     private WebDriver driver;
-//
-//    @BeforeEach
-//    public void setUp() {
-//        System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver.exe");
-//        driver = new ChromeDriver();
-//        driver.manage().window().maximize();
-//    }
 
-    @Test
-    @DisplayName("Create new account and login successfuly")
-    public void createAccountTest() {
+    @BeforeEach
+    public void setUp() {
         System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver.exe");
         driver = new ChromeDriver();
-      driver.manage().window().maximize();
+        driver.manage().window().maximize();
+
+    }
+
+    @Test
+    @DisplayName("Create new account and login successfully")
+    public void createAccountTest() {
         String gender = "Mrs.";
 
-        driver.navigate().to("http://automationpractice.com" );
-                Assertions.assertTrue(driver.getCurrentUrl().endsWith("/index.php"));
+        driver.navigate().to("http://automationpractice.com");
+        Assertions.assertTrue(driver.getCurrentUrl().endsWith("/index.php"));
 
         driver.findElement(By.cssSelector("a.login")).click();
         Assertions.assertTrue(driver.getCurrentUrl().endsWith("/index.php?controller=authentication&back=my-account"));
@@ -64,9 +62,10 @@ public class CreateAccountTest {
 
         createAccountForm.findElement(By.id("SubmitCreate")).click();
 
-        new WebDriverWait(driver, 10)
-                .until(ExpectedConditions.textToBe(By.className("page-heading"), "CREATE AN ACCOUNT"));
-        MatcherAssert.assertThat(driver.getCurrentUrl(), Matchers.endsWith("#account-creation"));
+
+        new WebDriverWait(driver, 5).until(ExpectedConditions.urlContains("#account-creation"));
+
+        Assertions.assertEquals("CREATE AN ACCOUNT", driver.findElement(By.className("page-heading")).getText());
 
         WebElement creationAccountForm = driver.findElement(By.id("account-creation_form"));
         Assertions.assertTrue(creationAccountForm.isDisplayed());
@@ -114,18 +113,12 @@ public class CreateAccountTest {
 
         MatcherAssert.assertThat(driver.getCurrentUrl(), Matchers.endsWith("my-account"));
 
-
-
-
-
-
-//        driver.quit();
     }
 
-//    @AfterEach
-//    public void tearDown() {
-//        driver.quit();
-//    }
+    @AfterEach
+    public void tearDown() {
+        driver.quit();
+    }
 }
 
 
